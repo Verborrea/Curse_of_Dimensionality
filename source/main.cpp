@@ -1,15 +1,19 @@
 #include <iostream>
 #include <random>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+    start = std::chrono::high_resolution_clock::now();
+  
 // Generar Distribucion Uniforme de 20'000 Puntos
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distribution(1,1000);
+    std::uniform_int_distribution<> distribution(1,100);
 
     const int dim = stoi(argv[1]);      //Nro de dimensiones - Cmd arg
     int puntos[20000][dim];
@@ -20,9 +24,9 @@ int main(int argc, char** argv)
         }
     }
 
-// Calcular y almacenar las distancias al primer puntos
+// Calcular y almacenar las distancias al primer punto
     float distancias[19999];
-    float min = 1500, max = 0;
+    float min = INFINITY, max = 0;
 
     for (int i = 1; i < 20000; i++) {
         int sum = 0;
@@ -35,6 +39,10 @@ int main(int argc, char** argv)
         distancias[i] = dis;
     }
 
+    end = std::chrono::high_resolution_clock::now();
+    int64_t duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+
 // Transformar las distancias a un rango [0-1]
     int range_dis[11];
     float max_min = max - min;
@@ -44,11 +52,10 @@ int main(int argc, char** argv)
         ++range_dis[(int)dis];
     }
 
-// Imprimir la tabla de distancias
+// Imprimir la tabla de distancias y el tiempo 
     for (int i = 0; i < 11; i++) {
         cout << range_dis[i] << endl;
-        // cout << i << ": " << range_dis[i] << endl;
     }
-
+    cout << "DIM: " << dim << ", tiempo: " << duration << " milisegundos\n";
     return 0;
 }
