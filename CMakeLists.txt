@@ -1,4 +1,4 @@
-project("CoD")
+project("Curse_of_Dimensionality")
 
 cmake_minimum_required(VERSION 3.15)
 
